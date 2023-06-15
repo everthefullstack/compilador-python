@@ -146,59 +146,72 @@ def find_column(token):
     return token.lexpos - last_br
 
 def p_error(p):
-    print("Syntax error in input!")
+    print(f"Syntax error in input! {p}")
 
 def p_atribui(p):
     """expression : ID
                   | NUM
+                  | ZERO
     """
+
     p[0] = p[1]
 
 def p_soma(p):
     """expression : expression MAIS expression 
                   | expression MAIS ZERO
     """
-    if p[3] != "zero":
-        p[0] = int(p[1]) + int(p[3])
+    if p[1] == "zero":
+        p[0] = 0 + int(p[3])
     
     elif p[3] == "zero":
-        p[0] = p[1] + 0
+        p[0] = int(p[1]) + 0
+    
+    else:
+        p[0] = int(p[1]) + int(p[3])
 
 def p_subtracao(p):
     """expression : expression MENOS expression 
-                  | expression  MENOS ZERO
+                  | expression MENOS ZERO
     """
-    if p[3] != "zero":
-        p[0] = int(p[1]) - int(p[3])
+    if p[1] == "zero":
+        p[0] = 0 - int(p[3])
     
     elif p[3] == "zero":
-        p[0] = p[1] - 0
+        p[0] = int(p[1]) - 0
+    
+    else:
+        p[0] = int(p[1]) - int(p[3])
 
 def p_multiplicacao(p):
     """expression : expression VEZES expression
                   | expression VEZES ZERO
     """
-    if p[3] != "zero":
-        p[0] = int(p[1]) * int(p[3])
+    if p[1] == "zero":
+        p[0] = 0 * int(p[3])
     
     elif p[3] == "zero":
-        p[0] = p[1] * 0
+        p[0] = int(p[1]) * 0
+    
+    else:
+        p[0] = int(p[1]) * int(p[3])
 
 def p_divisao(p):
     """expression : expression DIVIDE expression
                   | expression DIVIDE ZERO
     """
-    if p[3] != "zero":
-        p[0] = int(p[1]) / int(p[3])
+    if p[1] == "zero":
+        p[0] = 0 / int(p[3])
     
     elif p[3] == "zero":
-        p[0] = p[1] / 0
-
+        p[0] = int(p[1]) / 0
+    
+    else:
+        p[0] = int(p[1]) / int(p[3])
 
 # Constrói o lexer baseado no arquivo que se deseja ler
 dados = open('dados.elgol', encoding="utf-8")
 lexer = lex.lex()
-lexer.input("10 + zero")
+lexer.input("zero / 10")
 #create_txt(lexer)
 
 #Constrói o parser
