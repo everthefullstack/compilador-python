@@ -163,6 +163,10 @@ def p_expr(p):
             | entao
             | inicio
             | fim
+            | soma
+            | subtracao
+            | multiplicacao
+            | divisao
     """
     p[0] = p[1]
 
@@ -186,7 +190,11 @@ def p_num(p):
     """num : NUM
            | ZERO
     """
-    p[0] = p[1]
+    if p[1] == "zero":
+        p[0] = 0
+
+    else:
+        p[0] = p[1]
 
 def p_atribuicao(p):
     """atribuicao : var ATRIBUI var FIM_EXP
@@ -213,6 +221,17 @@ def p_logicos(p):
                | IGUAL
                | DIFERENTE
     """
+    if p[1] == "maior":
+        p[0] = ">"
+    
+    elif p[1] == "menor":
+        p[0] = "<"
+    
+    elif p[1] == "igual":
+        p[0] = "=="
+    
+    elif p[1] == "diferente":
+        p[0] = "!="
 
 def p_entao(p):
     """entao : ENTAO FIM_EXP
@@ -229,6 +248,47 @@ def p_fim(p):
            | FIM FIM_EXP start
     """
 
+def p_soma(p):
+    """soma : var MAIS var FIM_EXP
+            | var MAIS num FIM_EXP
+            | num MAIS num FIM_EXP
+            | var MAIS var FIM_EXP start
+            | var MAIS num FIM_EXP start
+            | num MAIS num FIM_EXP start
+    """
+    p[0] = p[1] + p[3]
+    print(p[0])
+    
+def p_subtracao(p):
+    """subtracao : var MENOS var FIM_EXP
+                 | var MENOS num FIM_EXP
+                 | num MENOS num FIM_EXP
+                 | var MENOS var FIM_EXP start
+                 | var MENOS num FIM_EXP start
+                 | num MENOS num FIM_EXP start
+    """
+    p[0] = p[1] - p[3]
+
+def p_multiplicacao(p):
+    """multiplicacao : var VEZES var FIM_EXP
+                     | var VEZES num FIM_EXP
+                     | num VEZES num FIM_EXP
+                     | var VEZES var FIM_EXP start
+                     | var VEZES num FIM_EXP start
+                     | num VEZES num FIM_EXP start
+    """
+    p[0] = p[1] * p[3]
+
+def p_divisao(p):
+    """divisao : var DIVIDE var FIM_EXP
+               | var DIVIDE num FIM_EXP
+               | num DIVIDE num FIM_EXP
+               | var DIVIDE var FIM_EXP start
+               | var DIVIDE num FIM_EXP start
+               | num DIVIDE num FIM_EXP start
+    """
+    p[0] = p[1] / p[3]
+
 # Dados lidos
 dados1 = open(sys.argv[1], encoding="utf-8")
 dados2 = open(sys.argv[1], encoding="utf-8")
@@ -241,6 +301,4 @@ lexer2.input(dados2.read())
 
 #Constrói o parser
 parser = yacc.yacc()
-result = parser.parse(lexer=lexer1)
-
-print(result)
+result = parser.parse(lexer=lexer1, debug=False)
