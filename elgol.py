@@ -309,5 +309,3 @@ lexer2.input(dados2.read())
 #Constrói o parser
 parser = yacc.yacc()
 result = parser.parse(lexer=lexer1, debug=False)
-
-print(variable_values)
