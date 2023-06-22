@@ -151,44 +151,61 @@ def find_column(token):
 def p_error(p):
     print(f"Syntax error in input! {p}")
 
+def p_start(p):
+    """start : expr
+    """
+    p[0] = p[1]
 
 def p_expr(p):
-    """expr : var
-            | tipo
-            | tipo_var
-            | atribui
+    """expr : tipo_var
+            | atribuicao
             | se
             | entao
             | inicio
             | fim
     """
+    p[0] = p[1]
 
-def p_var(p):
-    """var : ID 
-           | ID FIM_EXP
+def p_tipo_var(p):
+    """tipo_var : tipo var FIM_EXP
+                | tipo var FIM_EXP start
     """
-
+    p[0] = p[1]
 
 def p_tipo(p):
     """tipo : INTEIRO
     """
+    p[0] = p[1]
 
-def p_tipo_var(p):
-    """tipo_var : expr expr
+def p_var(p):
+    """var : ID 
     """
-    
+    p[0] = p[1]
+
 def p_num(p):
     """num : NUM
            | ZERO
-           | NUM FIM_EXP
-           | ZERO FIM_EXP
     """
+    p[0] = p[1]
 
-def p_atribui(p):
-    """atribui : expr ATRIBUI expr
-               | expr ATRIBUI num
+def p_atribuicao(p):
+    """atribuicao : var ATRIBUI var FIM_EXP
+                  | var ATRIBUI num FIM_EXP
+                  | var ATRIBUI var FIM_EXP start
+                  | var ATRIBUI num FIM_EXP start
     """
     p[0] = p[3]
+
+def p_se(p):
+    """se : SE var logicos var FIM_EXP
+          | SE num logicos num FIM_EXP
+          | SE num logicos var FIM_EXP
+          | SE var logicos num FIM_EXP
+          | SE var logicos var FIM_EXP start
+          | SE num logicos num FIM_EXP start
+          | SE num logicos var FIM_EXP start
+          | SE var logicos num FIM_EXP start
+    """
 
 def p_logicos(p):
     """logicos : MAIOR
@@ -197,23 +214,19 @@ def p_logicos(p):
                | DIFERENTE
     """
 
-def p_se(p):
-    """se : SE expr logicos expr
-          | SE num logicos num
-          | SE num logicos expr
-          | SE expr logicos num
-    """
-
 def p_entao(p):
     """entao : ENTAO FIM_EXP
+             | ENTAO FIM_EXP start
     """
 
 def p_inicio(p):
     """inicio : INICIO FIM_EXP
+              | INICIO FIM_EXP start
     """
 
 def p_fim(p):
     """fim : FIM FIM_EXP
+           | FIM FIM_EXP start
     """
 
 # Dados lidos
@@ -231,4 +244,3 @@ parser = yacc.yacc()
 result = parser.parse(lexer=lexer1)
 
 print(result)
-create_txt(lexer2)
