@@ -151,6 +151,9 @@ def find_column(token):
 def p_error(p):
     print(f"Syntax error in input! {p}")
 
+
+variable_values = {}
+
 def p_start(p):
     """start : expr
     """
@@ -190,6 +193,7 @@ def p_num(p):
     """num : NUM
            | ZERO
     """
+
     if p[1] == "zero":
         p[0] = 0
 
@@ -202,7 +206,7 @@ def p_atribuicao(p):
                   | var ATRIBUI var FIM_EXP start
                   | var ATRIBUI num FIM_EXP start
     """
-    p[0] = p[3]
+    variable_values.update({p[1]: p[3]})
 
 def p_se(p):
     """se : SE var logicos var FIM_EXP
@@ -214,7 +218,7 @@ def p_se(p):
           | SE num logicos var FIM_EXP start
           | SE var logicos num FIM_EXP start
     """
-    
+
 def p_logicos(p):
     """logicos : MAIOR
                | MENOR
@@ -305,3 +309,5 @@ lexer2.input(dados2.read())
 #Constrói o parser
 parser = yacc.yacc()
 result = parser.parse(lexer=lexer1, debug=False)
+
+print(variable_values)
