@@ -214,7 +214,7 @@ def p_se(p):
           | SE num logicos var FIM_EXP start
           | SE var logicos num FIM_EXP start
     """
-
+    
 def p_logicos(p):
     """logicos : MAIOR
                | MENOR
@@ -268,6 +268,7 @@ def p_subtracao(p):
                  | num MENOS num FIM_EXP start
     """
     p[0] = p[1] - p[3]
+    print(p[0])
 
 def p_multiplicacao(p):
     """multiplicacao : var VEZES var FIM_EXP
@@ -278,6 +279,7 @@ def p_multiplicacao(p):
                      | num VEZES num FIM_EXP start
     """
     p[0] = p[1] * p[3]
+    print(p[0])
 
 def p_divisao(p):
     """divisao : var DIVIDE var FIM_EXP
@@ -288,6 +290,7 @@ def p_divisao(p):
                | num DIVIDE num FIM_EXP start
     """
     p[0] = p[1] / p[3]
+    print(p[0])
 
 # Dados lidos
 dados1 = open(sys.argv[1], encoding="utf-8")
