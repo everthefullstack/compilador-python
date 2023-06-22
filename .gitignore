@@ -1,3 +1,5 @@
 **venv
 **parser.out
 **parsetab.py
+**lex.txt
+**__pycache__

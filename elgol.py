@@ -1,3 +1,4 @@
+import sys
 import ply.yacc as yacc
 import ply.lex as lex
 from utils import create_txt
@@ -48,10 +49,12 @@ t_ignore = " \t" #ignora espaços em branco, tem que ser assim vide documentaç�
 # Regra de expressão regular com algum código de ação para cada token
 def t_ID(t):
     r'[A-Z]{1}[a-z]{2,}'
+    t.value = t.value
     return t
 
 def t_NUM(t):
     r'[1-9]\d*'
+    t.value = int(t.value)
     return t
 
 def t_FUNCAO(t):
@@ -60,7 +63,7 @@ def t_FUNCAO(t):
 
 def t_FIM_EXP(t):
     r'[.]'
-    return t 
+    return t
 
 def t_ELGIO(t):
     r'\belgio\b'
@@ -148,74 +151,84 @@ def find_column(token):
 def p_error(p):
     print(f"Syntax error in input! {p}")
 
+
+def p_exprs(p):
+    """exprs : expr
+    """
+
+def p_expr(p):
+    """expr : var
+            | tipo_var
+            | atribui
+            | logicos
+            | se
+    """
+
+def p_var(p):
+    """var : ID 
+           | ID FIM_EXP
+    """
+
+def p_num(p):
+    """num : NUM
+           | ZERO
+           | NUM FIM_EXP
+           | ZERO FIM_EXP
+    """
+
+def p_tipo_var(p):
+    """tipo_var : INTEIRO expr expr
+
+    """
+
 def p_atribui(p):
-    """expression : ID
-                  | NUM
-                  | ZERO
+    """atribui : expr ATRIBUI expr FIM_EXP
+               | expr ATRIBUI num FIM_EXP
+
+    """
+    p[0] = p[3]
+
+def p_logicos(p):
+    """logicos : MAIOR
+               | MENOR
+               | IGUAL
+               | DIFERENTE
     """
 
-    p[0] = p[1]
-
-def p_soma(p):
-    """expression : expression MAIS expression 
-                  | expression MAIS ZERO
+def p_se(p):
+    """se : SE expr expr expr
+          | SE num expr num
+          | SE num expr expr
+          | SE expr expr num
     """
-    if p[1] == "zero":
-        p[0] = 0 + int(p[3])
-    
-    elif p[3] == "zero":
-        p[0] = int(p[1]) + 0
-    
-    else:
-        p[0] = int(p[1]) + int(p[3])
 
-def p_subtracao(p):
-    """expression : expression MENOS expression 
-                  | expression MENOS ZERO
+def p_entao(p):
+    """entao : ENTAO FIM_EXP
     """
-    if p[1] == "zero":
-        p[0] = 0 - int(p[3])
-    
-    elif p[3] == "zero":
-        p[0] = int(p[1]) - 0
-    
-    else:
-        p[0] = int(p[1]) - int(p[3])
 
-def p_multiplicacao(p):
-    """expression : expression VEZES expression
-                  | expression VEZES ZERO
+def p_inicio(p):
+    """inicio : INICIO FIM_EXP
     """
-    if p[1] == "zero":
-        p[0] = 0 * int(p[3])
-    
-    elif p[3] == "zero":
-        p[0] = int(p[1]) * 0
-    
-    else:
-        p[0] = int(p[1]) * int(p[3])
 
-def p_divisao(p):
-    """expression : expression DIVIDE expression
-                  | expression DIVIDE ZERO
+def p_fim(p):
+    """fim : FIM FIM_EXP
     """
-    if p[1] == "zero":
-        p[0] = 0 / int(p[3])
-    
-    elif p[3] == "zero":
-        p[0] = int(p[1]) / 0
-    
-    else:
-        p[0] = int(p[1]) / int(p[3])
 
-# Constrói o lexer baseado no arquivo que se deseja ler
-dados = open('dados.elgol', encoding="utf-8")
-lexer = lex.lex()
-lexer.input("zero / 10")
-#create_txt(lexer)
+
+
+# Dados lidos
+dados1 = open(sys.argv[1], encoding="utf-8")
+dados2 = open(sys.argv[1], encoding="utf-8")
+
+# Constrói o lexer
+lexer1 = lex.lex()
+lexer2 = lex.lex()
+lexer1.input(dados1.read())
+lexer2.input(dados2.read())
 
 #Constrói o parser
 parser = yacc.yacc()
-result = parser.parse(lexer=lexer)
+result = parser.parse(lexer=lexer1)
 
 print(result)
+create_txt(lexer2)
