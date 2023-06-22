@@ -152,16 +152,15 @@ def p_error(p):
     print(f"Syntax error in input! {p}")
 
 
-def p_exprs(p):
-    """exprs : expr
-    """
-
 def p_expr(p):
     """expr : var
+            | tipo
             | tipo_var
             | atribui
-            | logicos
             | se
+            | entao
+            | inicio
+            | fim
     """
 
 def p_var(p):
@@ -169,6 +168,15 @@ def p_var(p):
            | ID FIM_EXP
     """
 
+
+def p_tipo(p):
+    """tipo : INTEIRO
+    """
+
+def p_tipo_var(p):
+    """tipo_var : expr expr
+    """
+    
 def p_num(p):
     """num : NUM
            | ZERO
@@ -176,15 +184,9 @@ def p_num(p):
            | ZERO FIM_EXP
     """
 
-def p_tipo_var(p):
-    """tipo_var : INTEIRO expr expr
-
-    """
-
 def p_atribui(p):
-    """atribui : expr ATRIBUI expr FIM_EXP
-               | expr ATRIBUI num FIM_EXP
-
+    """atribui : expr ATRIBUI expr
+               | expr ATRIBUI num
     """
     p[0] = p[3]
 
@@ -196,10 +198,10 @@ def p_logicos(p):
     """
 
 def p_se(p):
-    """se : SE expr expr expr
-          | SE num expr num
-          | SE num expr expr
-          | SE expr expr num
+    """se : SE expr logicos expr
+          | SE num logicos num
+          | SE num logicos expr
+          | SE expr logicos num
     """
 
 def p_entao(p):
@@ -213,8 +215,6 @@ def p_inicio(p):
 def p_fim(p):
     """fim : FIM FIM_EXP
     """
-
-
 
 # Dados lidos
 dados1 = open(sys.argv[1], encoding="utf-8")
