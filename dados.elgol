@@ -1,9 +1,24 @@
-inteiro Lixo. # minha variavel
-inteiro Teste.
-Lixo = 34.
-se Lixo maior zero.
-entao.
+# Linguagem Elgol
+# autor Elgio Schlemer
+# sem erros
+inteiro _Fazalgo().
 inicio.
-        Lixo = zero.
-        Teste = 300.
+   inteiro Lixo.
+   
+   Lixo = Fazum x Fazdois + zero.
+   elgio = Lixo.
+fim.
+
+# programa principal, fora de função
+# deve começar também com inicio e fim que seriam os
+# { e } do C
+inicio.
+  inteiro Variavel.
+  inteiro Teste.
+  
+  Variavel = zero.
+  
+  #Teste = 45 x _Fazalgo (45, Variavel).
+  
+  Variavel = Variavel + 3 - 5 x 2 / 2 + Teste.
 fim.
