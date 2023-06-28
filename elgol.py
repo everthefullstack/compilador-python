@@ -246,22 +246,27 @@ def p_logicos(p):
 
 def p_entao(p):
     """entao : ENTAO FIM_EXP
+             | ENTAO FIM_EXP start
     """
 
 def p_senao(p):
     """senao : SENAO FIM_EXP
+             | SENAO FIM_EXP start
     """
 
 def p_enquanto(p):
     """enquanto : ENQUANTO FIM_EXP
+                | ENQUANTO FIM_EXP start
     """
 
 def p_inicio(p):
     """inicio : INICIO FIM_EXP
+              | INICIO FIM_EXP start
     """
 
 def p_fim(p):
     """fim : FIM FIM_EXP
+           | FIM FIM_EXP start
     """
 
 def p_expressao_var_num(p):
