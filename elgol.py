@@ -166,19 +166,21 @@ def p_start(p):
 
 def p_expr(p):
     """expr : tipo_var
+            | pontuacao
             | atribuicao
             | se
             | entao
+            | enquanto
+            | senao
             | inicio
             | fim
             | expr_arit
-            | funcao
     """
     p[0] = p[1]
 
 def p_tipo_var(p):
-    """tipo_var : tipo var FIM_EXP
-                | tipo var FIM_EXP start
+    """tipo_var : tipo var expr
+                | tipo var expr start
     """
     p[0] = p[1]
 
@@ -189,6 +191,7 @@ def p_tipo(p):
 
 def p_var(p):
     """var : ID 
+           | FUNCAO
            | ELGIO
     """
     p[0] = p[1]
@@ -203,23 +206,24 @@ def p_num(p):
     else:
         p[0] = p[1]
 
+def p_pontuacao(p):
+    """pontuacao : VIRGULA start
+                 | PAR_ESQ start
+                 | PAR_DIR start
+                 | FIM_EXP start
+    """
+    
 def p_atribuicao(p):
     """atribuicao : var ATRIBUI expr_arit
-                  | var ATRIBUI expr_arit FIM_EXP
-                  | var ATRIBUI expr_arit FIM_EXP start
 
     """
     variable_values.update({p[1]: p[3]})
 
 def p_se(p):
-    """se : SE var logicos var FIM_EXP
-          | SE num logicos num FIM_EXP
-          | SE num logicos var FIM_EXP
-          | SE var logicos num FIM_EXP
-          | SE var logicos var FIM_EXP start
-          | SE num logicos num FIM_EXP start
-          | SE num logicos var FIM_EXP start
-          | SE var logicos num FIM_EXP start
+    """se : SE var logicos var
+          | SE num logicos num
+          | SE num logicos var
+          | SE var logicos num
     """
 
 def p_logicos(p):
@@ -242,17 +246,22 @@ def p_logicos(p):
 
 def p_entao(p):
     """entao : ENTAO FIM_EXP
-             | ENTAO FIM_EXP start
+    """
+
+def p_senao(p):
+    """senao : SENAO FIM_EXP
+    """
+
+def p_enquanto(p):
+    """enquanto : ENQUANTO FIM_EXP
     """
 
 def p_inicio(p):
     """inicio : INICIO FIM_EXP
-              | INICIO FIM_EXP start
     """
 
 def p_fim(p):
     """fim : FIM FIM_EXP
-           | FIM FIM_EXP start
     """
 
 def p_expressao_var_num(p):
@@ -260,15 +269,16 @@ def p_expressao_var_num(p):
                  | num
     """
 
-def p_expressao_arit(p):
-    """expr_arit : expr_arit MAIS expr_arit
-                 | expr_arit MENOS expr_arit
-                 | expr_arit VEZES expr_arit
-                 | expr_arit DIVIDE expr_arit
+def p_operadores(p):
+    """operadores : MAIS
+                  | MENOS
+                  | VEZES
+                  | DIVIDE
     """
-
-def p_funcao(p):
-    """funcao : INTEIRO FUNCAO PAR_ESQ PAR_DIR FIM_EXP start
+    
+def p_expressao_arit(p):
+    """expr_arit : expr_arit operadores expr_arit
+                 | expr_arit operadores expr_arit expr
     """
 
 # Dados lidos

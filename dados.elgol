@@ -1,7 +1,7 @@
 # Linguagem Elgol
 # autor Elgio Schlemer
 # sem erros
-inteiro _Fazalgo().
+inteiro _Fazalgo(inteiro Fazum, inteiro Fazdois).
 inicio.
    inteiro Lixo.
    
@@ -18,7 +18,7 @@ inicio.
   
   Variavel = zero.
   
-  #Teste = 45 x _Fazalgo (45, Variavel).
+  Teste = 45 x _Fazalgo (45, Variavel).
   
   Variavel = Variavel + 3 - 5 x 2 / 2 + Teste.
 fim.
